@@ -1,0 +1,66 @@
+create database examen;
+
+use examen;
+
+-- Script DLL
+
+CREATE TABLE Usuarios (
+    id_usuario INT AUTO_INCREMENT PRIMARY KEY,
+    nombre VARCHAR(100),
+    email VARCHAR(100),
+    rol VARCHAR(50)
+);
+
+CREATE TABLE Categorias (
+    id_categoria INT AUTO_INCREMENT PRIMARY KEY,
+    nombre VARCHAR(100)
+);
+
+CREATE TABLE Casos (
+    id_caso INT AUTO_INCREMENT PRIMARY KEY,
+    titulo VARCHAR(100),
+    descripcion TEXT,
+    estado VARCHAR(50),
+    id_categoria INT,
+    fecha_creacion TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+    fecha_cierre TIMESTAMP,
+    FOREIGN KEY (id_categoria) REFERENCES Categorias(id_categoria)
+);
+
+CREATE TABLE Ingenieros (
+    id_ing INT AUTO_INCREMENT PRIMARY KEY,
+    nombre VARCHAR(100),
+    experiencia INT,
+    carga_laboral INT
+);
+
+CREATE TABLE Casos_Ingenieros (
+    id_caso INT,
+    id_ing INT,
+    fecha_asignacion TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+    fecha_resolucion TIMESTAMP,
+    estado VARCHAR(50),
+    PRIMARY KEY (id_caso, id_ing),
+    FOREIGN KEY (id_caso) REFERENCES Casos(id_caso),
+    FOREIGN KEY (id_ing) REFERENCES Ingenieros(id_ing)
+);
+
+CREATE TABLE Calificaciones (
+    id_calificacion INT AUTO_INCREMENT PRIMARY KEY,
+    id_caso INT,
+    calificacion INT,
+    comentario TEXT,
+    FOREIGN KEY (id_caso) REFERENCES Casos(id_caso)
+);
+
+-- Script DML
+
+INSERT INTO Categorias (nombre) VALUES ('Problema de redes'), ('Problema de hardware'), ('Problema de software');
+
+INSERT INTO Usuarios (nombre, email, rol) VALUES ('Usuario1', 'usuario1@example.com', 'Usuario'), ('Usuario2', 'usuario2@example.com', 'Usuario'), ('kevin Cruz', 'kevin123@example.com', 'Administrador') ;
+
+INSERT INTO Ingenieros (nombre, experiencia, carga_laboral) VALUES ('Ivan Cruz', 5, 10), ('Ingeniero ejemplo', 8, 8);
+
+INSERT INTO Casos (titulo, descripcion, estado, id_categoria) VALUES ('Problema con la conexión Wi-Fi', 'No puedo conectarme a la red Wi-Fi de la oficina.', 'Abierto', 1);
+
+INSERT INTO Casos_Ingenieros (id_caso, id_ing, estado) VALUES (1, 1, 'Asignado');
